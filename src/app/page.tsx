@@ -1,12 +1,5 @@
-import Dashboard from '@/components/dashboard';
-import { ParkingProvider } from '@/components/parking-provider';
+import {redirect} from 'next/navigation';
 
 export default function Home() {
-  return (
-    <main className="min-h-screen">
-      <ParkingProvider>
-        <Dashboard />
-      </ParkingProvider>
-    </main>
-  );
+  redirect('/en');
 }

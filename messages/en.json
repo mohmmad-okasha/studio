@@ -1,0 +1,56 @@
+{
+  "Dashboard": {
+    "parkingStatus": "Parking Status",
+    "dailyLog": "Daily Log"
+  },
+  "ParkingGrid": {
+    "slot": "Slot",
+    "available": "Available"
+  },
+  "DailyLog": {
+    "todaysTransactions": "Today's Transactions",
+    "searchPlaceholder": "Search by license plate...",
+    "licensePlate": "License Plate",
+    "slot": "Slot",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "amount": "Amount",
+    "payment": "Payment",
+    "noTransactions": "No transactions for today yet."
+  },
+  "CheckInDialog": {
+    "errorTitle": "Error",
+    "emptyLicensePlateError": "License plate cannot be empty.",
+    "successTitle": "Success",
+    "checkInSuccess": "Car with plate {licensePlate} checked into slot {slotId}.",
+    "ocrSuccessTitle": "OCR Success",
+    "ocrSuccessDescription": "License plate recognized: {licensePlate}",
+    "ocrFailedTitle": "OCR Failed",
+    "ocrFailedDescription": "Could not recognize the license plate. Please enter it manually.",
+    "fileReadError": "Failed to read the image file.",
+    "dialogTitle": "Check-in to Slot {slotId}",
+    "dialogDescription": "Enter the vehicle's license plate to check it in.",
+    "licensePlateLabel": "License Plate",
+    "licensePlatePlaceholder": "Enter license plate",
+    "uploadAriaLabel": "Upload license plate image",
+    "confirmButton": "Confirm Check-in"
+  },
+  "CheckOutDialog": {
+    "errorTitle": "Error",
+    "feeCalculationError": "Could not calculate parking fee.",
+    "successTitle": "Success",
+    "checkOutSuccess": "Car with plate {licensePlate} checked out from slot {slotId}.",
+    "dialogTitle": "Check-out from Slot {slotId}",
+    "dialogDescription": "Confirm details and process payment for license plate",
+    "checkInTime": "Check-in",
+    "duration": "Duration",
+    "feeCalculation": "Fee Calculation",
+    "calculatedFee": "Calculated Fee",
+    "adjustment": "Adjustment",
+    "totalAmount": "Total Amount",
+    "paymentMethod": "Payment Method",
+    "cash": "Cash",
+    "cliq": "CliQ",
+    "confirmButton": "Confirm & Check-out"
+  }
+}

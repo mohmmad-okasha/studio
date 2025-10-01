@@ -14,10 +14,12 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Badge } from './ui/badge';
+import { useTranslations } from 'next-intl';
 
 export default function DailyLog() {
   const { transactions } = useParking();
   const [searchTerm, setSearchTerm] = useState('');
+  const t = useTranslations('DailyLog');
 
   const filteredTransactions = transactions.filter((t) =>
     t.licensePlate.toLowerCase().includes(searchTerm.toLowerCase())
@@ -26,10 +28,10 @@ export default function DailyLog() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today's Transactions</CardTitle>
+        <CardTitle>{t('todaysTransactions')}</CardTitle>
         <div className="mt-4">
           <Input
-            placeholder="Search by license plate..."
+            placeholder={t('searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -41,12 +43,12 @@ export default function DailyLog() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>License Plate</TableHead>
-                <TableHead className="hidden md:table-cell">Slot</TableHead>
-                <TableHead>Check-in</TableHead>
-                <TableHead>Check-out</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="hidden sm:table-cell">Payment</TableHead>
+                <TableHead>{t('licensePlate')}</TableHead>
+                <TableHead className="hidden md:table-cell">{t('slot')}</TableHead>
+                <TableHead>{t('checkIn')}</TableHead>
+                <TableHead>{t('checkOut')}</TableHead>
+                <TableHead className="text-right">{t('amount')}</TableHead>
+                <TableHead className="hidden sm:table-cell">{t('payment')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -66,7 +68,7 @@ export default function DailyLog() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center h-24">
-                    No transactions for today yet.
+                    {t('noTransactions')}
                   </TableCell>
                 </TableRow>
               )}

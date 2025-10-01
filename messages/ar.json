@@ -1,0 +1,56 @@
+{
+  "Dashboard": {
+    "parkingStatus": "حالة المواقف",
+    "dailyLog": "السجل اليومي"
+  },
+  "ParkingGrid": {
+    "slot": "موقف",
+    "available": "متاح"
+  },
+  "DailyLog": {
+    "todaysTransactions": "معاملات اليوم",
+    "searchPlaceholder": "ابحث باستخدام رقم لوحة الترخيص...",
+    "licensePlate": "رقم لوحة الترخيص",
+    "slot": "الموقف",
+    "checkIn": "الدخول",
+    "checkOut": "الخروج",
+    "amount": "المبلغ",
+    "payment": "الدفع",
+    "noTransactions": "لا توجد معاملات لهذا اليوم بعد."
+  },
+  "CheckInDialog": {
+    "errorTitle": "خطأ",
+    "emptyLicensePlateError": "لا يمكن أن يكون رقم لوحة الترخيص فارغًا.",
+    "successTitle": "نجاح",
+    "checkInSuccess": "تم تسجيل دخول السيارة التي تحمل اللوحة {licensePlate} في الموقف {slotId}.",
+    "ocrSuccessTitle": "نجاح OCR",
+    "ocrSuccessDescription": "تم التعرف على لوحة الترخيص: {licensePlate}",
+    "ocrFailedTitle": "فشل OCR",
+    "ocrFailedDescription": "تعذر التعرف على لوحة الترخيص. يرجى إدخالها يدويًا.",
+    "fileReadError": "فشل في قراءة ملف الصورة.",
+    "dialogTitle": "تسجيل الدخول إلى الموقف {slotId}",
+    "dialogDescription": "أدخل رقم لوحة ترخيص المركبة لتسجيل دخولها.",
+    "licensePlateLabel": "رقم لوحة الترخيص",
+    "licensePlatePlaceholder": "أدخل رقم لوحة الترخيص",
+    "uploadAriaLabel": "تحميل صورة لوحة الترخيص",
+    "confirmButton": "تأكيد تسجيل الدخول"
+  },
+  "CheckOutDialog": {
+    "errorTitle": "خطأ",
+    "feeCalculationError": "تعذر حساب رسوم الموقف.",
+    "successTitle": "نجاح",
+    "checkOutSuccess": "تم تسجيل خروج السيارة التي تحمل اللوحة {licensePlate} من الموقف {slotId}.",
+    "dialogTitle": "تسجيل الخروج من الموقف {slotId}",
+    "dialogDescription": "قم بتأكيد التفاصيل ومعالجة الدفع للوحة الترخيص",
+    "checkInTime": "وقت الدخول",
+    "duration": "المدة",
+    "feeCalculation": "حساب الرسوم",
+    "calculatedFee": "الرسوم المحسوبة",
+    "adjustment": "تعديل",
+    "totalAmount": "المبلغ الإجمالي",
+    "paymentMethod": "طريقة الدفع",
+    "cash": "نقداً",
+    "cliq": "كليك",
+    "confirmButton": "تأكيد وتسجيل الخروج"
+  }
+}

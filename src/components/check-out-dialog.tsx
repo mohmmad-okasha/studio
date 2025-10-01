@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { calculateParkingFee } from '@/ai/flows/calculate-parking-fee';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceStrict, format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 interface CheckOutDialogProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ const PRICING_RULES = "First hour: $5. Each additional hour: $3. Daily maximum: 
 export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDialogProps) {
   const { checkOutCar } = useParking();
   const { toast } = useToast();
+  const t = useTranslations('CheckOutDialog');
 
   const [isLoadingFee, setIsLoadingFee] = useState(false);
   const [calculatedFee, setCalculatedFee] = useState<number | null>(null);
@@ -63,8 +65,8 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
         .catch((err) => {
           console.error(err);
           toast({
-            title: 'Error',
-            description: 'Could not calculate parking fee.',
+            title: t('errorTitle'),
+            description: t('feeCalculationError'),
             variant: 'destructive',
           });
         })
@@ -72,7 +74,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
           setIsLoadingFee(false);
         });
     }
-  }, [isOpen, slot.checkInTime, durationHours, toast]);
+  }, [isOpen, slot.checkInTime, durationHours, toast, t]);
   
   const finalAmount = useMemo(() => {
     const baseFee = calculatedFee ?? 0;
@@ -84,8 +86,8 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
     e.preventDefault();
     checkOutCar(slot.id, finalAmount, paymentMethod);
     toast({
-      title: 'Success',
-      description: `Car with plate ${slot.licensePlate} checked out from slot ${slot.id}.`,
+      title: t('successTitle'),
+      description: t('checkOutSuccess', { licensePlate: slot.licensePlate, slotId: slot.id }),
       className: 'bg-accent text-accent-foreground',
     });
     setIsOpen(false);
@@ -99,21 +101,21 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Check-out from Slot {slot.id}</DialogTitle>
+            <DialogTitle>{t('dialogTitle', { slotId: slot.id })}</DialogTitle>
             <DialogDescription>
-              Confirm details and process payment for license plate{' '}
+              {t('dialogDescription')} {' '}
               <span className="font-bold text-primary">{slot.licensePlate}</span>.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="text-sm">
-              <p><strong>Check-in:</strong> {format(slot.checkInTime, 'Pp')}</p>
-              <p><strong>Duration:</strong> {formatDistanceStrict(currentTime, slot.checkInTime)}</p>
+              <p><strong>{t('checkInTime')}:</strong> {format(slot.checkInTime, 'Pp')}</p>
+              <p><strong>{t('duration')}:</strong> {formatDistanceStrict(currentTime, slot.checkInTime)}</p>
             </div>
             
             <div className="p-3 bg-secondary rounded-lg">
-              <h4 className="font-semibold mb-2">Fee Calculation</h4>
+              <h4 className="font-semibold mb-2">{t('feeCalculation')}</h4>
               {isLoadingFee ? (
                  <div className="flex items-center justify-center h-24">
                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -122,15 +124,15 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
                 <div className="space-y-2">
                   <p className="text-xs text-muted-foreground">{feeExplanation}</p>
                   <div className="flex items-baseline justify-between">
-                    <Label>Calculated Fee</Label>
+                    <Label>{t('calculatedFee')}</Label>
                     <p className="text-lg font-bold">${calculatedFee?.toFixed(2) ?? '0.00'}</p>
                   </div>
                    <div className="flex items-center justify-between">
-                    <Label htmlFor="adjustment">Adjustment</Label>
+                    <Label htmlFor="adjustment">{t('adjustment')}</Label>
                     <Input id="adjustment" type="number" step="0.01" value={manualAdjustment} onChange={e => setManualAdjustment(e.target.value)} className="w-28 h-8" placeholder="$0.00"/>
                   </div>
                    <div className="flex items-baseline justify-between border-t pt-2 mt-2">
-                    <Label className="text-base">Total Amount</Label>
+                    <Label className="text-base">{t('totalAmount')}</Label>
                     <p className="text-2xl font-bold text-accent">${finalAmount.toFixed(2)}</p>
                   </div>
                 </div>
@@ -138,15 +140,15 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
             </div>
 
             <div>
-              <Label className="mb-2 block">Payment Method</Label>
+              <Label className="mb-2 block">{t('paymentMethod')}</Label>
               <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="Cash" id="cash" />
-                  <Label htmlFor="cash">Cash</Label>
+                  <Label htmlFor="cash">{t('cash')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="CliQ" id="cliq" />
-                  <Label htmlFor="cliq">CliQ</Label>
+                  <Label htmlFor="cliq">{t('cliq')}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -154,7 +156,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
           </div>
           <DialogFooter>
             <Button type="submit" className="bg-accent hover:bg-accent/90" disabled={isLoadingFee}>
-              Confirm & Check-out
+              {t('confirmButton')}
             </Button>
           </DialogFooter>
         </form>
