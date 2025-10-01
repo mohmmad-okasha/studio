@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-import {NextIntlClientProvider, useMessages} from 'next-intl';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -19,8 +18,6 @@ export default function RootLayout({
   children: React.ReactNode;
   params: {locale: string};
 }>) {
-  const messages = useMessages();
-
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
        <head>
@@ -29,9 +26,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased', inter.variable)}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        {children}
         <Toaster />
       </body>
     </html>
