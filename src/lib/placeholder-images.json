@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "license-plate-sample",
+      "description": "A sample image of a car's license plate.",
+      "imageUrl": "https://images.unsplash.com/photo-1558282710-ba317c762f69?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsaWNlbnNlJTIwcGxhdGV8ZW58MHx8fHwxNzU5MjM2NTQzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "license plate"
+    }
+  ]
 }
