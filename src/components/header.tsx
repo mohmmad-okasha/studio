@@ -1,6 +1,7 @@
 import { ParkingCircle, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
+import ThemeSwitcher from './theme-switcher';
 
 export default function Header() {
   
@@ -15,6 +16,7 @@ export default function Header() {
             </h1>
           </Link>
           <div className="flex items-center gap-2">
+            <ThemeSwitcher />
             <Button asChild variant="ghost">
               <Link href="/admin">
                 <Shield className="mr-2 h-4 w-4" />
