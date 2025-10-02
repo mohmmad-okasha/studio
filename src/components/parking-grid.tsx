@@ -35,23 +35,23 @@ export default function ParkingGrid() {
             className={cn(
               'cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1',
               slot.isOccupied
-                ? 'bg-amber-100 border-amber-300 hover:bg-amber-200'
-                : 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100'
+                ? 'bg-amber-100 border-amber-300 hover:bg-amber-200 dark:bg-amber-900/40 dark:border-amber-700/60 dark:hover:bg-amber-900/60'
+                : 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:border-emerald-800/50 dark:hover:bg-emerald-900/50'
             )}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
-              <CardTitle className="text-sm font-medium">Slot {slot.id}</CardTitle>
+              <CardTitle className="text-sm font-medium text-foreground/80">Slot {slot.id}</CardTitle>
               {slot.isOccupied ? (
-                <Car className="h-5 w-5 text-amber-600" />
+                <Car className="h-5 w-5 text-amber-500 dark:text-amber-400" />
               ) : (
-                <ParkingCircle className="h-5 w-5 text-emerald-500" />
+                <ParkingCircle className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
               )}
             </CardHeader>
             <CardContent className="p-4 pt-0">
               {slot.isOccupied && slot.licensePlate ? (
                 <div className="text-sm">
-                  <p className="font-bold text-lg text-amber-900">{slot.licensePlate}</p>
-                  <div className="flex items-center gap-1 text-amber-700 mt-1">
+                  <p className="font-bold text-lg text-amber-900 dark:text-amber-200">{slot.licensePlate}</p>
+                  <div className="flex items-center gap-1 text-amber-700 dark:text-amber-400/80 mt-1">
                     <Clock className="h-3 w-3" />
                     <span className="text-xs">
                       {formatDistanceToNow(slot.checkInTime!, { addSuffix: true })}
@@ -59,7 +59,7 @@ export default function ParkingGrid() {
                   </div>
                 </div>
               ) : (
-                <p className="text-lg font-bold text-emerald-600">Available</p>
+                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-300">Available</p>
               )}
             </CardContent>
           </Card>
