@@ -16,7 +16,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ParkingSlot } from '@/lib/types';
 import { useParking } from '@/hooks/use-parking';
 import { useToast } from '@/hooks/use-toast';
-import { calculateParkingFee } from '@/ai/flows/calculate-parking-fee';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceStrict, format } from 'date-fns';
 
@@ -27,7 +26,7 @@ interface CheckOutDialogProps {
 }
 
 export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDialogProps) {
-  const { checkOutCar, pricingRules } = useParking();
+  const { checkOutCar, pricePerHour, pricePerDay } = useParking();
   const { toast } = useToast();
 
   const [isLoadingFee, setIsLoadingFee] = useState(false);
@@ -50,27 +49,35 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
   useEffect(() => {
     if (isOpen && slot.checkInTime) {
       setIsLoadingFee(true);
-      calculateParkingFee({
-        durationHours: durationHours,
-        pricingRules: pricingRules,
-      })
-        .then((result) => {
-          setCalculatedFee(result.calculatedFee);
-          setFeeExplanation(result.explanation);
-        })
-        .catch((err) => {
-          console.error(err);
-          toast({
-            title: 'Error',
-            description: 'Could not calculate parking fee.',
-            variant: 'destructive',
-          });
-        })
-        .finally(() => {
-          setIsLoadingFee(false);
-        });
+      const hours = durationHours;
+      const fullDays = Math.floor(hours / 24);
+      const remainingHours = Math.ceil(hours % 24);
+
+      let fee = 0;
+      let explanation = '';
+      
+      if (fullDays > 0) {
+        fee += fullDays * pricePerDay;
+        explanation += `${fullDays} day(s) at $${pricePerDay}/day. `;
+      }
+      
+      const hourlyCost = remainingHours * pricePerHour;
+
+      if (pricePerDay > 0 && hourlyCost > pricePerDay) {
+        fee += pricePerDay;
+        explanation += `Remaining time capped at daily rate of $${pricePerDay}.`;
+      } else {
+        fee += hourlyCost;
+        if(remainingHours > 0) {
+          explanation += `${remainingHours} hour(s) at $${pricePerHour}/hour.`;
+        }
+      }
+
+      setCalculatedFee(fee);
+      setFeeExplanation(explanation);
+      setIsLoadingFee(false);
     }
-  }, [isOpen, slot.checkInTime, durationHours, toast, pricingRules]);
+  }, [isOpen, slot.checkInTime, durationHours, pricePerHour, pricePerDay]);
   
   const finalAmount = useMemo(() => {
     const baseFee = calculatedFee ?? 0;

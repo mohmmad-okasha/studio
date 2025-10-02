@@ -20,15 +20,18 @@ export interface ParkingContextType {
   checkOutCar: (slotId: number, amount: number, paymentMethod: 'Cash' | 'CliQ') => void;
   totalSlots: number;
   setTotalSlots: (count: number) => void;
-  pricingRules: string;
-  setPricingRules: (rules: string) => void;
+  pricePerHour: number;
+  setPricePerHour: (price: number) => void;
+  pricePerDay: number;
+  setPricePerDay: (price: number) => void;
 }
 
 export const ParkingContext = createContext<ParkingContextType | undefined>(undefined);
 
 export const ParkingProvider = ({ children }: { children: ReactNode }) => {
   const [totalSlots, setTotalSlots] = useState(30);
-  const [pricingRules, setPricingRules] = useState("First hour: $5. Each additional hour: $3. Daily maximum: $25.");
+  const [pricePerHour, setPricePerHour] = useState(5);
+  const [pricePerDay, setPricePerDay] = useState(25);
   const [slots, setSlots] = useState<ParkingSlot[]>(() => createInitialSlots(totalSlots));
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -84,7 +87,7 @@ export const ParkingProvider = ({ children }: { children: ReactNode }) => {
   };
   
   return (
-    <ParkingContext.Provider value={{ slots, transactions, checkInCar, checkOutCar, totalSlots, setTotalSlots, pricingRules, setPricingRules }}>
+    <ParkingContext.Provider value={{ slots, transactions, checkInCar, checkOutCar, totalSlots, setTotalSlots, pricePerHour, setPricePerHour, pricePerDay, setPricePerDay }}>
       {children}
     </ParkingContext.Provider>
   );

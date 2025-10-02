@@ -6,10 +6,9 @@ import { useParking } from '@/hooks/use-parking';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
 
 export default function AdminDashboard() {
-    const { slots, transactions, totalSlots, setTotalSlots, pricingRules, setPricingRules } = useParking();
+    const { slots, transactions, totalSlots, setTotalSlots, pricePerHour, setPricePerHour, pricePerDay, setPricePerDay } = useParking();
 
     const occupiedSlots = slots.filter(s => s.isOccupied).length;
     const totalRevenue = transactions.reduce((acc, t) => acc + t.amount, 0);
@@ -47,7 +46,7 @@ export default function AdminDashboard() {
             <CardHeader>
                 <CardTitle>Settings</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-6 md:grid-cols-2">
+            <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <div className="space-y-2">
                     <Label htmlFor="total-slots">Total Parking Slots</Label>
                     <Input 
@@ -59,13 +58,23 @@ export default function AdminDashboard() {
                     />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="pricing-rules">Flexible Pricing Rules</Label>
-                    <Textarea 
-                        id="pricing-rules"
-                        placeholder="e.g., First hour: $5. Each additional hour: $3. Daily maximum: $25."
-                        value={pricingRules}
-                        onChange={(e) => setPricingRules(e.target.value)}
-                        rows={3}
+                    <Label htmlFor="price-per-hour">Price Per Hour ($)</Label>
+                    <Input 
+                        id="price-per-hour"
+                        type="number" 
+                        value={pricePerHour}
+                        onChange={(e) => setPricePerHour(parseFloat(e.target.value) || 0)}
+                        min="0"
+                    />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="price-per-day">Price Per Day ($)</Label>
+                    <Input 
+                        id="price-per-day"
+                        type="number" 
+                        value={pricePerDay}
+                        onChange={(e) => setPricePerDay(parseFloat(e.target.value) || 0)}
+                        min="0"
                     />
                 </div>
             </CardContent>
