@@ -14,10 +14,8 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Badge } from './ui/badge';
-import { useTranslations } from 'next-intl';
 
 export default function DailyLog() {
-  const t = useTranslations('DailyLog');
   const { transactions } = useParking();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -28,10 +26,10 @@ export default function DailyLog() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle>Today's Transactions</CardTitle>
         <div className="mt-4">
           <Input
-            placeholder={t('searchPlaceholder')}
+            placeholder="Search by license plate..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -43,12 +41,12 @@ export default function DailyLog() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t('columns.licensePlate')}</TableHead>
-                <TableHead className="hidden md:table-cell">{t('columns.slot')}</TableHead>
-                <TableHead>{t('columns.checkIn')}</TableHead>
-                <TableHead>{t('columns.checkOut')}</TableHead>
-                <TableHead className="text-right">{t('columns.amount')}</TableHead>
-                <TableHead className="hidden sm:table-cell">{t('columns.payment')}</TableHead>
+                <TableHead>License Plate</TableHead>
+                <TableHead className="hidden md:table-cell">Slot</TableHead>
+                <TableHead>Check-in</TableHead>
+                <TableHead>Check-out</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
+                <TableHead className="hidden sm:table-cell">Payment</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -68,7 +66,7 @@ export default function DailyLog() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center h-24">
-                    {t('noTransactions')}
+                    No transactions for today yet.
                   </TableCell>
                 </TableRow>
               )}

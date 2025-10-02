@@ -11,10 +11,8 @@ import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { AlertCircle } from 'lucide-react';
 import OccupancyChart from './occupancy-chart';
-import { useTranslations } from 'next-intl';
 
 export default function AdminDashboard() {
-    const t = useTranslations('AdminDashboard');
     const { 
         slots, 
         transactions, 
@@ -52,8 +50,8 @@ export default function AdminDashboard() {
         });
         setHasUnsavedChanges(false);
         toast({
-            title: t('toast.settingsSavedTitle'),
-            description: t('toast.settingsSavedDescription'),
+            title: "Settings Saved",
+            description: "Your changes have been saved successfully.",
             className: 'bg-accent text-accent-foreground'
         });
     };
@@ -65,28 +63,28 @@ export default function AdminDashboard() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
-        <h2 className="text-3xl font-bold tracking-tight mb-6">{t('title')}</h2>
+        <h2 className="text-3xl font-bold tracking-tight mb-6">Admin Dashboard</h2>
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
             <OccupancyChart />
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">{t('totalRevenue')}</CardTitle>
+                    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="h-4 w-4 text-muted-foreground"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
-                    <p className="text-xs text-muted-foreground">{t('revenueSubtitle', {count: transactions.length})}</p>
+                    <p className="text-xs text-muted-foreground">from {transactions.length} transactions today</p>
                 </CardContent>
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">{t('occupiedSlots')}</CardTitle>
+                    <CardTitle className="text-sm font-medium">Occupied Slots</CardTitle>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="h-4 w-4 text-muted-foreground"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">{occupiedSlots} / {slots.length}</div>
-                    <p className="text-xs text-muted-foreground">{t('occupiedSlotsSubtitle')}</p>
+                    <p className="text-xs text-muted-foreground">Currently occupied parking slots</p>
                 </CardContent>
             </Card>
         </div>
@@ -94,11 +92,11 @@ export default function AdminDashboard() {
         <Card className="mb-6">
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <CardTitle>{t('settings.title')}</CardTitle>
+                    <CardTitle>Settings</CardTitle>
                     {hasUnsavedChanges && (
                         <div className="flex items-center gap-2 text-sm text-destructive">
                             <AlertCircle className="h-4 w-4" />
-                            <span>{t('settings.unsavedChanges')}</span>
+                            <span>You have unsaved changes.</span>
                         </div>
                     )}
                 </div>
@@ -106,7 +104,7 @@ export default function AdminDashboard() {
             <CardContent className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     <div className="space-y-2">
-                        <Label htmlFor="total-slots">{t('settings.totalParkingSlots')}</Label>
+                        <Label htmlFor="total-slots">Total Parking Slots</Label>
                         <Input 
                             id="total-slots" 
                             type="number" 
@@ -116,7 +114,7 @@ export default function AdminDashboard() {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="price-per-hour">{t('settings.pricePerHour')}</Label>
+                        <Label htmlFor="price-per-hour">Price Per Hour ($)</Label>
                         <Input 
                             id="price-per-hour"
                             type="number" 
@@ -127,7 +125,7 @@ export default function AdminDashboard() {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="price-per-day">{t('settings.pricePerDay')}</Label>
+                        <Label htmlFor="price-per-day">Price Per Day ($)</Label>
                         <Input 
                             id="price-per-day"
                             type="number" 
@@ -140,7 +138,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="flex justify-end">
                     <Button onClick={handleSave} disabled={!hasUnsavedChanges}>
-                        {t('settings.saveButton')}
+                        Save Settings
                     </Button>
                 </div>
             </CardContent>

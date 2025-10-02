@@ -1,11 +1,8 @@
 import { ParkingCircle, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
-import LanguageSwitcher from './language-switcher';
-import { useTranslations } from 'next-intl';
 
 export default function Header() {
-  const t = useTranslations('Header');
   
   return (
     <header className="bg-card shadow-sm">
@@ -21,10 +18,9 @@ export default function Header() {
             <Button asChild variant="ghost">
               <Link href="/admin">
                 <Shield className="mr-2 h-4 w-4" />
-                {t('admin')}
+                Admin
               </Link>
             </Button>
-            <LanguageSwitcher />
           </div>
         </div>
       </div>

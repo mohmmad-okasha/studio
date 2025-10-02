@@ -1,6 +1,12 @@
-import { redirect } from 'next/navigation';
+import Dashboard from '@/components/dashboard';
+import { ParkingProvider } from '@/components/parking-provider';
 
-// This page only renders for the root `/` URL
-export default function RootPage() {
-  redirect('/ar');
+export default function Home() {
+  return (
+    <main className="min-h-screen">
+      <ParkingProvider>
+        <Dashboard />
+      </ParkingProvider>
+    </main>
+  );
 }
