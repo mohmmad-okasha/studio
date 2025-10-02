@@ -47,51 +47,42 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
     }
   }, [isOpen, isCameraViewOpen]);
   
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    processImage(file);
-  };
-  
-  const processImage = (imageBlob: Blob) => {
+  const processImage = async (dataUri: string) => {
     setOcrLoading(true);
     setCameraViewOpen(false); // Close camera view after capture
     try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const dataUri = reader.result as string;
-        try {
-          const result = await recognizeLicensePlate({ photoDataUri: dataUri });
-          if (result.licensePlate) {
-            setLicensePlate(result.licensePlate.toUpperCase());
-            toast({
-              title: 'OCR Success',
-              description: `License plate recognized: ${result.licensePlate}`,
-            });
-          } else {
-            throw new Error('No license plate found.');
-          }
-        } catch (aiError) {
-          console.error("AI Error:", aiError);
-          toast({
-            title: 'OCR Failed',
-            description: 'Could not recognize the license plate. Please enter it manually.',
-            variant: 'destructive',
-          });
-        } finally {
-          setOcrLoading(false);
-        }
-      };
-      reader.readAsDataURL(imageBlob);
-    } catch (error) {
-       console.error("File Read Error:", error);
-       toast({
-          title: 'Error',
-          description: 'Failed to read the image file.',
-          variant: 'destructive',
-       });
-       setOcrLoading(false);
+      const result = await recognizeLicensePlate({ photoDataUri: dataUri });
+      if (result.licensePlate) {
+        setLicensePlate(result.licensePlate.toUpperCase());
+        toast({
+          title: 'OCR Success',
+          description: `License plate recognized: ${result.licensePlate}`,
+        });
+      } else {
+        throw new Error('No license plate found.');
+      }
+    } catch (aiError) {
+      console.error("AI Error:", aiError);
+      toast({
+        title: 'OCR Failed',
+        description: 'Could not recognize the license plate. Please enter it manually.',
+        variant: 'destructive',
+      });
+    } finally {
+      setOcrLoading(false);
     }
+  };
+  
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const dataUri = reader.result as string;
+      processImage(dataUri);
+    };
+    reader.readAsDataURL(file);
   };
 
   const openCamera = async () => {
@@ -118,11 +109,8 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
       const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        canvas.toBlob((blob) => {
-          if (blob) {
-            processImage(blob);
-          }
-        }, 'image/jpeg');
+        const dataUri = canvas.toDataURL('image/jpeg');
+        processImage(dataUri);
       }
     }
   };
@@ -196,7 +184,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
           <DialogHeader>
             <DialogTitle>Check-in to Slot {slot.id}</DialogTitle>
             <DialogDescription>
-              Enter the vehicle's license plate to check it in.
+              Enter the vehicle's license plate to check it in. You can use the camera to recognize it.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -210,20 +198,27 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
                   value={licensePlate}
                   onChange={(e) => setLicensePlate(e.target.value)}
                   placeholder="Enter license plate"
-                  className="pr-12 text-lg h-12"
+                  className="pr-24 text-lg h-12"
                   required
                 />
-                 <Button 
-                    type="button" 
-                    size="icon" 
-                    variant="ghost" 
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-10"
-                    onClick={openCamera}
-                    disabled={isOcrLoading}
-                    aria-label="Recognize license plate with camera"
-                  >
-                    {isOcrLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
-                  </Button>
+                 <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
+                    <Button 
+                      type="button" 
+                      size="icon" 
+                      variant="ghost" 
+                      className="h-9 w-10"
+                      onClick={openCamera}
+                      disabled={isOcrLoading}
+                      aria-label="Recognize license plate with camera"
+                    >
+                      {isOcrLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
+                    </Button>
+                    <Label htmlFor="plate-upload" className="flex items-center justify-center h-9 w-10 cursor-pointer text-muted-foreground hover:text-foreground">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                        <span className="sr-only">Upload image</span>
+                    </Label>
+                    <Input id="plate-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange}/>
+                 </div>
               </div>
             </div>
           </div>
