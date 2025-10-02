@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +17,6 @@ import { useParking } from '@/hooks/use-parking';
 import { useToast } from '@/hooks/use-toast';
 import { Camera, Loader2 } from 'lucide-react';
 import { recognizeLicensePlate } from '@/ai/flows/license-plate-recognition';
-import { useTranslations } from 'next-intl';
 
 interface CheckInDialogProps {
   isOpen: boolean;
@@ -31,23 +30,21 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
   const { toast } = useToast();
   const [isOcrLoading, setOcrLoading] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const t = useTranslations('CheckInDialog');
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!licensePlate.trim()) {
       toast({
-        title: t('errorTitle'),
-        description: t('emptyLicensePlateError'),
+        title: 'Error',
+        description: 'License plate cannot be empty.',
         variant: 'destructive',
       });
       return;
     }
     checkInCar(slot.id, licensePlate.toUpperCase());
     toast({
-      title: t('successTitle'),
-      description: t('checkInSuccess', { licensePlate: licensePlate.toUpperCase(), slotId: slot.id }),
+      title: 'Success',
+      description: `Car with plate ${licensePlate.toUpperCase()} checked into slot ${slot.id}.`,
       variant: 'default',
       className: 'bg-accent text-accent-foreground',
     });
@@ -69,8 +66,8 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
           if (result.licensePlate) {
             setLicensePlate(result.licensePlate.toUpperCase());
             toast({
-              title: t('ocrSuccessTitle'),
-              description: t('ocrSuccessDescription', { licensePlate: result.licensePlate }),
+              title: 'OCR Success',
+              description: `License plate recognized: ${result.licensePlate}`,
             });
           } else {
             throw new Error('No license plate found.');
@@ -78,8 +75,8 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
         } catch (aiError) {
           console.error("AI Error:", aiError);
           toast({
-            title: t('ocrFailedTitle'),
-            description: t('ocrFailedDescription'),
+            title: 'OCR Failed',
+            description: 'Could not recognize the license plate. Please enter it manually.',
             variant: 'destructive',
           });
         } finally {
@@ -90,8 +87,8 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
     } catch (error) {
        console.error("File Read Error:", error);
        toast({
-          title: t('errorTitle'),
-          description: t('fileReadError'),
+          title: 'Error',
+          description: 'Failed to read the image file.',
           variant: 'destructive',
        });
        setOcrLoading(false);
@@ -104,22 +101,22 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{t('dialogTitle', { slotId: slot.id })}</DialogTitle>
+            <DialogTitle>Check-in to Slot {slot.id}</DialogTitle>
             <DialogDescription>
-              {t('dialogDescription')}
+              Enter the vehicle's license plate to check it in.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-1 items-center gap-4">
               <Label htmlFor="license-plate" className="sr-only">
-                {t('licensePlateLabel')}
+                License Plate
               </Label>
               <div className="relative">
                 <Input
                   id="license-plate"
                   value={licensePlate}
                   onChange={(e) => setLicensePlate(e.target.value)}
-                  placeholder={t('licensePlatePlaceholder')}
+                  placeholder="Enter license plate"
                   className="pr-12 text-lg h-12"
                   required
                 />
@@ -130,7 +127,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
                     className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-10"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isOcrLoading}
-                    aria-label={t('uploadAriaLabel')}
+                    aria-label="Upload license plate image"
                   >
                     {isOcrLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
                   </Button>
@@ -146,7 +143,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
           </div>
           <DialogFooter>
             <Button type="submit" className="bg-accent hover:bg-accent/90">
-              {t('confirmButton')}
+              Confirm Check-in
             </Button>
           </DialogFooter>
         </form>

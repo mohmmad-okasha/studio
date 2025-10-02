@@ -9,14 +9,12 @@ import { formatDistanceToNow } from 'date-fns';
 import { ParkingSlot } from '@/lib/types';
 import CheckInDialog from './check-in-dialog';
 import CheckOutDialog from './check-out-dialog';
-import { useTranslations } from 'next-intl';
 
 export default function ParkingGrid() {
   const { slots } = useParking();
   const [selectedSlot, setSelectedSlot] = useState<ParkingSlot | null>(null);
   const [isCheckInOpen, setCheckInOpen] = useState(false);
   const [isCheckOutOpen, setCheckOutOpen] = useState(false);
-  const t = useTranslations('ParkingGrid');
 
   const handleSlotClick = (slot: ParkingSlot) => {
     setSelectedSlot(slot);
@@ -42,7 +40,7 @@ export default function ParkingGrid() {
             )}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
-              <CardTitle className="text-sm font-medium">{t('slot')} {slot.id}</CardTitle>
+              <CardTitle className="text-sm font-medium">Slot {slot.id}</CardTitle>
               {slot.isOccupied ? (
                 <Car className="h-5 w-5 text-amber-600" />
               ) : (
@@ -61,7 +59,7 @@ export default function ParkingGrid() {
                   </div>
                 </div>
               ) : (
-                <p className="text-lg font-bold text-emerald-600">{t('available')}</p>
+                <p className="text-lg font-bold text-emerald-600">Available</p>
               )}
             </CardContent>
           </Card>

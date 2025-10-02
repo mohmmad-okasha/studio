@@ -1,5 +1,4 @@
 import { ParkingCircle } from 'lucide-react';
-import LanguageSwitcher from './language-switcher';
 
 export default function Header() {
   return (
@@ -12,7 +11,6 @@ export default function Header() {
               ParkPilot
             </h1>
           </div>
-          <LanguageSwitcher />
         </div>
       </div>
     </header>
