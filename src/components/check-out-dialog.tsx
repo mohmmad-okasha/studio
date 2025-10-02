@@ -18,6 +18,7 @@ import { useParking } from '@/hooks/use-parking';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceStrict, format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 interface CheckOutDialogProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ interface CheckOutDialogProps {
 }
 
 export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDialogProps) {
+  const t = useTranslations('CheckOutDialog');
   const { checkOutCar, pricePerHour, pricePerDay } = useParking();
   const { toast } = useToast();
 
@@ -58,18 +60,18 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       
       if (fullDays > 0) {
         fee += fullDays * pricePerDay;
-        explanation += `${fullDays} day(s) at $${pricePerDay}/day. `;
+        explanation += t('fee.days', { count: fullDays, price: pricePerDay });
       }
       
       const hourlyCost = remainingHours * pricePerHour;
 
       if (pricePerDay > 0 && hourlyCost > pricePerDay) {
         fee += pricePerDay;
-        explanation += `Remaining time capped at daily rate of $${pricePerDay}.`;
+        explanation += t('fee.dailyCap', { price: pricePerDay });
       } else {
         fee += hourlyCost;
         if(remainingHours > 0) {
-          explanation += `${remainingHours} hour(s) at $${pricePerHour}/hour.`;
+          explanation += t('fee.hours', { count: remainingHours, price: pricePerHour });
         }
       }
 
@@ -77,7 +79,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       setFeeExplanation(explanation);
       setIsLoadingFee(false);
     }
-  }, [isOpen, slot.checkInTime, durationHours, pricePerHour, pricePerDay]);
+  }, [isOpen, slot.checkInTime, durationHours, pricePerHour, pricePerDay, t]);
   
   const finalAmount = useMemo(() => {
     const baseFee = calculatedFee ?? 0;
@@ -89,8 +91,8 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
     e.preventDefault();
     checkOutCar(slot.id, finalAmount, paymentMethod);
     toast({
-      title: 'Success',
-      description: `Car with plate ${slot.licensePlate} checked out from slot ${slot.id}.`,
+      title: t('toast.successTitle'),
+      description: t('toast.successDescription', { licensePlate: slot.licensePlate, slotId: slot.id }),
       className: 'bg-accent text-accent-foreground',
     });
     setIsOpen(false);
@@ -104,21 +106,20 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Check-out from Slot {slot.id}</DialogTitle>
+            <DialogTitle>{t('title', { slotId: slot.id })}</DialogTitle>
             <DialogDescription>
-              Confirm details and process payment for license plate{' '}
-              <span className="font-bold text-primary">{slot.licensePlate}</span>.
+              {t('description')} <span className="font-bold text-primary">{slot.licensePlate}</span>.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="text-sm">
-              <p><strong>Check-in:</strong> {format(slot.checkInTime, 'Pp')}</p>
-              <p><strong>Duration:</strong> {formatDistanceStrict(currentTime, slot.checkInTime)}</p>
+              <p><strong>{t('checkInTime')}:</strong> {format(slot.checkInTime, 'Pp')}</p>
+              <p><strong>{t('duration')}:</strong> {formatDistanceStrict(currentTime, slot.checkInTime)}</p>
             </div>
             
             <div className="p-3 bg-secondary rounded-lg">
-              <h4 className="font-semibold mb-2">Fee Calculation</h4>
+              <h4 className="font-semibold mb-2">{t('fee.title')}</h4>
               {isLoadingFee ? (
                  <div className="flex items-center justify-center h-24">
                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -127,15 +128,15 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
                 <div className="space-y-2">
                   <p className="text-xs text-muted-foreground">{feeExplanation}</p>
                   <div className="flex items-baseline justify-between">
-                    <Label>Calculated Fee</Label>
+                    <Label>{t('fee.calculatedFee')}</Label>
                     <p className="text-lg font-bold">${calculatedFee?.toFixed(2) ?? '0.00'}</p>
                   </div>
                    <div className="flex items-center justify-between">
-                    <Label htmlFor="adjustment">Adjustment</Label>
+                    <Label htmlFor="adjustment">{t('fee.adjustment')}</Label>
                     <Input id="adjustment" type="number" step="0.01" value={manualAdjustment} onChange={e => setManualAdjustment(e.target.value)} className="w-28 h-8" placeholder="$0.00"/>
                   </div>
                    <div className="flex items-baseline justify-between border-t pt-2 mt-2">
-                    <Label className="text-base">Total Amount</Label>
+                    <Label className="text-base">{t('fee.totalAmount')}</Label>
                     <p className="text-2xl font-bold text-accent">${finalAmount.toFixed(2)}</p>
                   </div>
                 </div>
@@ -143,15 +144,15 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
             </div>
 
             <div>
-              <Label className="mb-2 block">Payment Method</Label>
+              <Label className="mb-2 block">{t('payment.title')}</Label>
               <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="Cash" id="cash" />
-                  <Label htmlFor="cash">Cash</Label>
+                  <Label htmlFor="cash">{t('payment.cash')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="CliQ" id="cliq" />
-                  <Label htmlFor="cliq">CliQ</Label>
+                  <Label htmlFor="cliq">{t('payment.cliq')}</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -159,7 +160,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
           </div>
           <DialogFooter>
             <Button type="submit" className="bg-accent hover:bg-accent/90" disabled={isLoadingFee}>
-              Confirm & Check-out
+              {t('confirmButton')}
             </Button>
           </DialogFooter>
         </form>

@@ -1,8 +1,12 @@
 import { ParkingCircle, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
+import LanguageSwitcher from './language-switcher';
+import { useTranslations } from 'next-intl';
 
 export default function Header() {
+  const t = useTranslations('Header');
+  
   return (
     <header className="bg-card shadow-sm">
       <div className="container mx-auto px-4 py-3">
@@ -13,12 +17,15 @@ export default function Header() {
               ParkPilot
             </h1>
           </Link>
-          <Button asChild variant="ghost">
-            <Link href="/admin">
-              <Shield className="mr-2 h-4 w-4" />
-              Admin
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="ghost">
+              <Link href="/admin">
+                <Shield className="mr-2 h-4 w-4" />
+                {t('admin')}
+              </Link>
+            </Button>
+            <LanguageSwitcher />
+          </div>
         </div>
       </div>
     </header>

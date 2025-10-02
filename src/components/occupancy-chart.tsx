@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useParking } from '@/hooks/use-parking';
+import { useTranslations } from 'next-intl';
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -20,7 +21,6 @@ const renderCustomizedLabel = ({
   innerRadius,
   outerRadius,
   percent,
-  index,
 }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -41,20 +41,21 @@ const renderCustomizedLabel = ({
 };
 
 export default function OccupancyChart() {
+  const t = useTranslations('OccupancyChart');
   const { slots } = useParking();
 
   const occupied = slots.filter((slot) => slot.isOccupied).length;
   const available = slots.length - occupied;
 
   const data = [
-    { name: 'Occupied', value: occupied, color: 'hsl(var(--chart-2))' },
-    { name: 'Available', value: available, color: 'hsl(var(--chart-1))' },
+    { name: t('occupied'), value: occupied, color: 'hsl(var(--chart-2))' },
+    { name: t('available'), value: available, color: 'hsl(var(--chart-1))' },
   ];
 
   return (
     <Card className="lg:col-span-2">
       <CardHeader>
-        <CardTitle>Current Occupancy</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div style={{ width: '100%', height: 150 }}>

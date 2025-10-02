@@ -1,9 +1,7 @@
 'use client';
 
 import Header from '@/components/header';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ParkingGrid from './parking-grid';
-import DailyLog from './daily-log';
 
 export default function Dashboard() {
   return (
