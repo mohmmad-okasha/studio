@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Languages } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next-intl/link';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function LanguageSwitcher() {
   const t = useTranslations('LanguageSwitcher');
@@ -18,7 +18,9 @@ export default function LanguageSwitcher() {
   const pathname = usePathname();
 
   const handleLocaleChange = (nextLocale: string) => {
-    router.replace(pathname, { locale: nextLocale });
+    // router.replace(pathname, { locale: nextLocale }); // This is for next-intl/link
+    const newPath = `/${nextLocale}${pathname.substring(pathname.indexOf('/', 1))}`;
+    router.replace(newPath);
   };
 
   return (
