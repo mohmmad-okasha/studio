@@ -26,10 +26,8 @@ interface CheckOutDialogProps {
   slot: ParkingSlot;
 }
 
-const PRICING_RULES = "First hour: $5. Each additional hour: $3. Daily maximum: $25.";
-
 export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDialogProps) {
-  const { checkOutCar } = useParking();
+  const { checkOutCar, pricingRules } = useParking();
   const { toast } = useToast();
 
   const [isLoadingFee, setIsLoadingFee] = useState(false);
@@ -54,7 +52,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       setIsLoadingFee(true);
       calculateParkingFee({
         durationHours: durationHours,
-        pricingRules: PRICING_RULES,
+        pricingRules: pricingRules,
       })
         .then((result) => {
           setCalculatedFee(result.calculatedFee);
@@ -72,7 +70,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
           setIsLoadingFee(false);
         });
     }
-  }, [isOpen, slot.checkInTime, durationHours, toast]);
+  }, [isOpen, slot.checkInTime, durationHours, toast, pricingRules]);
   
   const finalAmount = useMemo(() => {
     const baseFee = calculatedFee ?? 0;

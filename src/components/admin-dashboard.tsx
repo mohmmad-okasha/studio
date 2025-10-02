@@ -4,9 +4,12 @@ import Header from '@/components/header';
 import DailyLog from './daily-log';
 import { useParking } from '@/hooks/use-parking';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
 
 export default function AdminDashboard() {
-    const { slots, transactions } = useParking();
+    const { slots, transactions, totalSlots, setTotalSlots, pricingRules, setPricingRules } = useParking();
 
     const occupiedSlots = slots.filter(s => s.isOccupied).length;
     const totalRevenue = transactions.reduce((acc, t) => acc + t.amount, 0);
@@ -16,6 +19,7 @@ export default function AdminDashboard() {
       <Header />
       <div className="flex-grow container mx-auto px-4 py-6">
         <h2 className="text-3xl font-bold tracking-tight mb-6">Admin Dashboard</h2>
+        
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -38,6 +42,35 @@ export default function AdminDashboard() {
                 </CardContent>
             </Card>
         </div>
+
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle>Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                    <Label htmlFor="total-slots">Total Parking Slots</Label>
+                    <Input 
+                        id="total-slots" 
+                        type="number" 
+                        value={totalSlots}
+                        onChange={(e) => setTotalSlots(parseInt(e.target.value, 10) || 1)}
+                        min="1"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="pricing-rules">Flexible Pricing Rules</Label>
+                    <Textarea 
+                        id="pricing-rules"
+                        placeholder="e.g., First hour: $5. Each additional hour: $3. Daily maximum: $25."
+                        value={pricingRules}
+                        onChange={(e) => setPricingRules(e.target.value)}
+                        rows={3}
+                    />
+                </div>
+            </CardContent>
+        </Card>
+
         <DailyLog />
       </div>
     </div>
