@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { Badge } from './ui/badge';
+import { ar } from 'date-fns/locale';
 
 export default function DailyLog() {
   const { transactions } = useParking();
@@ -26,10 +27,10 @@ export default function DailyLog() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today's Transactions</CardTitle>
+        <CardTitle>معاملات اليوم</CardTitle>
         <div className="mt-4">
           <Input
-            placeholder="Search by license plate..."
+            placeholder="البحث عن طريق لوحة الترخيص..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -41,12 +42,12 @@ export default function DailyLog() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>License Plate</TableHead>
-                <TableHead className="hidden md:table-cell">Slot</TableHead>
-                <TableHead>Check-in</TableHead>
-                <TableHead>Check-out</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="hidden sm:table-cell">Payment</TableHead>
+                <TableHead>لوحة الترخيص</TableHead>
+                <TableHead className="hidden md:table-cell">الموقف</TableHead>
+                <TableHead>تسجيل الدخول</TableHead>
+                <TableHead>تسجيل الخروج</TableHead>
+                <TableHead className="text-right">المبلغ</TableHead>
+                <TableHead className="hidden sm:table-cell">الدفع</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -55,18 +56,20 @@ export default function DailyLog() {
                   <TableRow key={t.id}>
                     <TableCell className="font-medium">{t.licensePlate}</TableCell>
                     <TableCell className="hidden md:table-cell">{t.slotId}</TableCell>
-                    <TableCell>{format(t.checkInTime, 'HH:mm')}</TableCell>
-                    <TableCell>{format(t.checkOutTime, 'HH:mm')}</TableCell>
+                    <TableCell>{format(t.checkInTime, 'HH:mm', { locale: ar })}</TableCell>
+                    <TableCell>{format(t.checkOutTime, 'HH:mm', { locale: ar })}</TableCell>
                     <TableCell className="text-right">${t.amount.toFixed(2)}</TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <Badge variant={t.paymentMethod === 'Cash' ? 'secondary' : 'default'} className={t.paymentMethod === 'CliQ' ? 'bg-primary' : ''}>{t.paymentMethod}</Badge>
+                      <Badge variant={t.paymentMethod === 'Cash' ? 'secondary' : 'default'} className={t.paymentMethod === 'CliQ' ? 'bg-primary' : ''}>
+                        {t.paymentMethod === 'Cash' ? 'نقداً' : 'كليك'}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center h-24">
-                    No transactions for today yet.
+                    لا توجد معاملات لهذا اليوم بعد.
                   </TableCell>
                 </TableRow>
               )}

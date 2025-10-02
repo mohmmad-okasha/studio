@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Car, Clock, ParkingCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
+import { ar } from 'date-fns/locale';
 import { ParkingSlot } from '@/lib/types';
 import CheckInDialog from './check-in-dialog';
 import CheckOutDialog from './check-out-dialog';
@@ -40,7 +41,7 @@ export default function ParkingGrid() {
             )}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
-              <CardTitle className="text-sm font-medium text-foreground/80">Slot {slot.id}</CardTitle>
+              <CardTitle className="text-sm font-medium text-foreground/80">موقف {slot.id}</CardTitle>
               {slot.isOccupied ? (
                 <Car className="h-5 w-5 text-amber-500 dark:text-amber-400" />
               ) : (
@@ -54,12 +55,12 @@ export default function ParkingGrid() {
                   <div className="flex items-center gap-1 text-amber-700 dark:text-amber-400/80 mt-1">
                     <Clock className="h-3 w-3" />
                     <span className="text-xs">
-                      {formatDistanceToNow(slot.checkInTime!, { addSuffix: true })}
+                      {formatDistanceToNow(slot.checkInTime!, { addSuffix: true, locale: ar })}
                     </span>
                   </div>
                 </div>
               ) : (
-                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-300">Available</p>
+                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-300">متاح</p>
               )}
             </CardContent>
           </Card>

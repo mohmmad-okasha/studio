@@ -18,6 +18,7 @@ import { useParking } from '@/hooks/use-parking';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceStrict, format } from 'date-fns';
+import { ar } from 'date-fns/locale';
 
 interface CheckOutDialogProps {
   isOpen: boolean;
@@ -58,18 +59,18 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       
       if (fullDays > 0) {
         fee += fullDays * pricePerDay;
-        explanation += `${fullDays} day(s) at $${pricePerDay}/day. `;
+        explanation += `${fullDays} يوم بسعر ${pricePerDay}$/يوم. `;
       }
       
       const hourlyCost = remainingHours * pricePerHour;
 
       if (pricePerDay > 0 && hourlyCost > pricePerDay) {
         fee += pricePerDay;
-        explanation += `Remaining time capped at daily rate of $${pricePerDay}.`;
+        explanation += `الوقت المتبقي مقيد بالسعر اليومي ${pricePerDay}$.`;
       } else {
         fee += hourlyCost;
         if(remainingHours > 0) {
-          explanation += `${remainingHours} hour(s) at $${pricePerHour}/hour.`;
+          explanation += `${remainingHours} ساعة بسعر ${pricePerHour}$/ساعة.`;
         }
       }
 
@@ -89,8 +90,8 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
     e.preventDefault();
     checkOutCar(slot.id, finalAmount, paymentMethod);
     toast({
-      title: 'Success',
-      description: `Car with plate ${slot.licensePlate} checked out from slot ${slot.id}.`,
+      title: 'نجاح',
+      description: `تم تسجيل خروج السيارة بلوحة ${slot.licensePlate} من الموقف ${slot.id}.`,
       className: 'bg-accent text-accent-foreground',
     });
     setIsOpen(false);
@@ -104,20 +105,20 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Check-out from Slot {slot.id}</DialogTitle>
+            <DialogTitle>تسجيل الخروج من الموقف {slot.id}</DialogTitle>
             <DialogDescription>
-              Confirm details and process payment for license plate <span className="font-bold text-primary">{slot.licensePlate}</span>.
+              تأكيد التفاصيل ومعالجة الدفع للوحة الترخيص <span className="font-bold text-primary">{slot.licensePlate}</span>.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="text-sm">
-              <p><strong>Check-in:</strong> {format(slot.checkInTime, 'Pp')}</p>
-              <p><strong>Duration:</strong> {formatDistanceStrict(currentTime, slot.checkInTime)}</p>
+              <p><strong>تسجيل الدخول:</strong> {format(slot.checkInTime, 'Pp', { locale: ar })}</p>
+              <p><strong>المدة:</strong> {formatDistanceStrict(currentTime, slot.checkInTime, { locale: ar, addSuffix: true })}</p>
             </div>
             
             <div className="p-3 bg-secondary rounded-lg">
-              <h4 className="font-semibold mb-2">Fee Calculation</h4>
+              <h4 className="font-semibold mb-2">حساب الرسوم</h4>
               {isLoadingFee ? (
                  <div className="flex items-center justify-center h-24">
                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -126,15 +127,15 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
                 <div className="space-y-2">
                   <p className="text-xs text-muted-foreground">{feeExplanation}</p>
                   <div className="flex items-baseline justify-between">
-                    <Label>Calculated Fee</Label>
+                    <Label>الرسوم المحسوبة</Label>
                     <p className="text-lg font-bold">${calculatedFee?.toFixed(2) ?? '0.00'}</p>
                   </div>
                    <div className="flex items-center justify-between">
-                    <Label htmlFor="adjustment">Adjustment</Label>
+                    <Label htmlFor="adjustment">تعديل</Label>
                     <Input id="adjustment" type="number" step="0.01" value={manualAdjustment} onChange={e => setManualAdjustment(e.target.value)} className="w-28 h-8" placeholder="$0.00"/>
                   </div>
                    <div className="flex items-baseline justify-between border-t pt-2 mt-2">
-                    <Label className="text-base">Total Amount</Label>
+                    <Label className="text-base">المبلغ الإجمالي</Label>
                     <p className="text-2xl font-bold text-accent">${finalAmount.toFixed(2)}</p>
                   </div>
                 </div>
@@ -142,15 +143,15 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
             </div>
 
             <div>
-              <Label className="mb-2 block">Payment Method</Label>
+              <Label className="mb-2 block">طريقة الدفع</Label>
               <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="Cash" id="cash" />
-                  <Label htmlFor="cash">Cash</Label>
+                  <Label htmlFor="cash">نقداً</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="CliQ" id="cliq" />
-                  <Label htmlFor="cliq">CliQ</Label>
+                  <Label htmlFor="cliq">كليك</Label>
                 </div>
               </RadioGroup>
             </div>
@@ -158,7 +159,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
           </div>
           <DialogFooter>
             <Button type="submit" className="bg-accent hover:bg-accent/90" disabled={isLoadingFee}>
-              Confirm & Check-out
+              تأكيد وتسجيل الخروج
             </Button>
           </DialogFooter>
         </form>

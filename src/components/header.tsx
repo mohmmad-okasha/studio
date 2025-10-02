@@ -12,15 +12,15 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-3">
             <ParkingCircle className="h-8 w-8 text-primary" />
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              ParkPilot
+              مساعد الركن
             </h1>
           </Link>
           <div className="flex items-center gap-2">
             <ThemeSwitcher />
             <Button asChild variant="ghost">
               <Link href="/admin">
-                <Shield className="mr-2 h-4 w-4" />
-                Admin
+                <Shield className="ml-2 h-4 w-4" />
+                المسؤول
               </Link>
             </Button>
           </div>

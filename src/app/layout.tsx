@@ -8,8 +8,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'ParkPilot',
-  description: 'Public parking garage management system',
+  title: 'ParkPilot | مساعد الركن',
+  description: 'نظام إدارة مواقف السيارات العامة',
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ar" dir="rtl">
       <body
         className={cn(
           'min-h-screen bg-background font-body antialiased',

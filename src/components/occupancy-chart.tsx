@@ -46,14 +46,14 @@ export default function OccupancyChart() {
   const available = slots.length - occupied;
 
   const data = [
-    { name: 'Occupied', value: occupied, color: 'hsl(var(--chart-2))' },
-    { name: 'Available', value: available, color: 'hsl(var(--chart-1))' },
+    { name: 'مشغول', value: occupied, color: 'hsl(var(--chart-2))' },
+    { name: 'متاح', value: available, color: 'hsl(var(--chart-1))' },
   ];
 
   return (
     <Card className="lg:col-span-2">
       <CardHeader>
-        <CardTitle>Current Occupancy</CardTitle>
+        <CardTitle>الإشغال الحالي</CardTitle>
       </CardHeader>
       <CardContent>
         <div style={{ width: '100%', height: 150 }}>
