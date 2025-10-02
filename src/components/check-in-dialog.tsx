@@ -201,10 +201,10 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
                   value={licensePlate}
                   onChange={(e) => setLicensePlate(e.target.value)}
                   placeholder="أدخل لوحة الترخيص"
-                  className="pl-24 text-lg h-12"
+                  className="pr-24 text-lg h-12"
                   required
                 />
-                 <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
+                 <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center">
                     <Button 
                       type="button" 
                       size="icon" 
