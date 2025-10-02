@@ -11,9 +11,9 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <ParkingCircle className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              مساعد الركن
-            </h1>
+            <Button className="text-2xl font-bold tracking-tight text-foreground">
+             Parking
+            </Button>
           </Link>
           <div className="flex items-center gap-2">
             <ThemeSwitcher />

@@ -56,7 +56,7 @@ export default function OccupancyChart() {
         <CardTitle>الإشغال الحالي</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ width: '100%', height: 150 }}>
+        <div style={{ width: '100%', height: 165 }}>
           <ResponsiveContainer>
             <PieChart>
               <Pie
