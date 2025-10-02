@@ -2,7 +2,12 @@ import Dashboard from '@/components/dashboard';
 import { ParkingProvider } from '@/components/parking-provider';
 import {unstable_setRequestLocale} from 'next-intl/server';
 
-export default function Home({params: {locale}}: {params: {locale: string}}) {
+type Props = {
+  params: {locale: string};
+};
+
+export default function Home({params: {locale}}: Props) {
+  // Enable static rendering
   unstable_setRequestLocale(locale);
   
   return (

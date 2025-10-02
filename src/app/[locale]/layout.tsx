@@ -1,26 +1,38 @@
-import {notFound} from 'next/navigation';
+import {NextIntlClientProvider} from 'next-intl';
+import {getMessages, unstable_setRequestLocale} from 'next-intl/server';
 import {ReactNode} from 'react';
-import {NextIntlClientProvider, useMessages} from 'next-intl';
-import {unstable_setRequestLocale} from 'next-intl/server';
- 
+
 const locales = ['en', 'ar'];
  
 type Props = {
   children: ReactNode;
   params: {locale: string};
 };
-
-export default function LocaleLayout({children, params: {locale}}: Props) {
-  if (!locales.includes(locale as any)) notFound();
+ 
+export default async function LocaleLayout({
+  children,
+  params: {locale}
+}: Props) {
+  // Validate that the incoming `locale` parameter is valid
+  if (!locales.includes(locale)) {
+     // In a real app, you'd want to show a 404 page here.
+    // For now, we'll just throw an error.
+    throw new Error(`Invalid locale: ${locale}`);
+  }
  
   unstable_setRequestLocale(locale);
  
-  // Receive messages provided in `i18n.ts`
-  const messages = useMessages();
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
  
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
-    </NextIntlClientProvider>
+    <html lang={locale}>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
