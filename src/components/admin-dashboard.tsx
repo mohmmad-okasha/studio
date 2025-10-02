@@ -1,14 +1,59 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Header from '@/components/header';
 import DailyLog from './daily-log';
 import { useParking } from '@/hooks/use-parking';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { AlertCircle } from 'lucide-react';
 
 export default function AdminDashboard() {
-    const { slots, transactions, totalSlots, setTotalSlots, pricePerHour, setPricePerHour, pricePerDay, setPricePerDay } = useParking();
+    const { 
+        slots, 
+        transactions, 
+        totalSlots, 
+        pricePerHour, 
+        pricePerDay,
+        saveSettings
+    } = useParking();
+    const { toast } = useToast();
+
+    const [localTotalSlots, setLocalTotalSlots] = useState(totalSlots);
+    const [localPricePerHour, setLocalPricePerHour] = useState(pricePerHour);
+    const [localPricePerDay, setLocalPricePerDay] = useState(pricePerDay);
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+    useEffect(() => {
+        setLocalTotalSlots(totalSlots);
+        setLocalPricePerHour(pricePerHour);
+        setLocalPricePerDay(pricePerDay);
+    }, [totalSlots, pricePerHour, pricePerDay]);
+
+    useEffect(() => {
+        const hasChanges = 
+            localTotalSlots !== totalSlots || 
+            localPricePerHour !== pricePerHour || 
+            localPricePerDay !== pricePerDay;
+        setHasUnsavedChanges(hasChanges);
+    }, [localTotalSlots, localPricePerHour, localPricePerDay, totalSlots, pricePerHour, pricePerDay]);
+
+    const handleSave = () => {
+        saveSettings({
+            newTotalSlots: localTotalSlots,
+            newPricePerHour: localPricePerHour,
+            newPricePerDay: localPricePerDay,
+        });
+        setHasUnsavedChanges(false);
+        toast({
+            title: 'Settings Saved',
+            description: 'Your changes have been saved successfully.',
+            className: 'bg-accent text-accent-foreground'
+        });
+    };
 
     const occupiedSlots = slots.filter(s => s.isOccupied).length;
     const totalRevenue = transactions.reduce((acc, t) => acc + t.amount, 0);
@@ -44,38 +89,55 @@ export default function AdminDashboard() {
 
         <Card className="mb-6">
             <CardHeader>
-                <CardTitle>Settings</CardTitle>
+                <div className="flex items-center justify-between">
+                    <CardTitle>Settings</CardTitle>
+                    {hasUnsavedChanges && (
+                        <div className="flex items-center gap-2 text-sm text-destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <span>You have unsaved changes.</span>
+                        </div>
+                    )}
+                </div>
             </CardHeader>
-            <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <div className="space-y-2">
-                    <Label htmlFor="total-slots">Total Parking Slots</Label>
-                    <Input 
-                        id="total-slots" 
-                        type="number" 
-                        value={totalSlots}
-                        onChange={(e) => setTotalSlots(parseInt(e.target.value, 10) || 1)}
-                        min="1"
-                    />
+            <CardContent className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="space-y-2">
+                        <Label htmlFor="total-slots">Total Parking Slots</Label>
+                        <Input 
+                            id="total-slots" 
+                            type="number" 
+                            value={localTotalSlots}
+                            onChange={(e) => setLocalTotalSlots(parseInt(e.target.value, 10) || 1)}
+                            min="1"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="price-per-hour">Price Per Hour ($)</Label>
+                        <Input 
+                            id="price-per-hour"
+                            type="number" 
+                            value={localPricePerHour}
+                            onChange={(e) => setLocalPricePerHour(parseFloat(e.target.value) || 0)}
+                            min="0"
+                            step="0.01"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="price-per-day">Price Per Day ($)</Label>
+                        <Input 
+                            id="price-per-day"
+                            type="number" 
+                            value={localPricePerDay}
+                            onChange={(e) => setLocalPricePerDay(parseFloat(e.target.value) || 0)}
+                            min="0"
+                            step="0.01"
+                        />
+                    </div>
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="price-per-hour">Price Per Hour ($)</Label>
-                    <Input 
-                        id="price-per-hour"
-                        type="number" 
-                        value={pricePerHour}
-                        onChange={(e) => setPricePerHour(parseFloat(e.target.value) || 0)}
-                        min="0"
-                    />
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="price-per-day">Price Per Day ($)</Label>
-                    <Input 
-                        id="price-per-day"
-                        type="number" 
-                        value={pricePerDay}
-                        onChange={(e) => setPricePerDay(parseFloat(e.target.value) || 0)}
-                        min="0"
-                    />
+                <div className="flex justify-end">
+                    <Button onClick={handleSave} disabled={!hasUnsavedChanges}>
+                        Save Settings
+                    </Button>
                 </div>
             </CardContent>
         </Card>

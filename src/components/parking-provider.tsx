@@ -24,6 +24,7 @@ export interface ParkingContextType {
   setPricePerHour: (price: number) => void;
   pricePerDay: number;
   setPricePerDay: (price: number) => void;
+  saveSettings: (settings: { newTotalSlots: number; newPricePerHour: number; newPricePerDay: number }) => void;
 }
 
 export const ParkingContext = createContext<ParkingContextType | undefined>(undefined);
@@ -86,8 +87,26 @@ export const ParkingProvider = ({ children }: { children: ReactNode }) => {
     );
   };
   
+  const saveSettings = ({ newTotalSlots, newPricePerHour, newPricePerDay }: { newTotalSlots: number; newPricePerHour: number; newPricePerDay: number }) => {
+    setTotalSlots(newTotalSlots);
+    setPricePerHour(newPricePerHour);
+    setPricePerDay(newPricePerDay);
+  };
+
   return (
-    <ParkingContext.Provider value={{ slots, transactions, checkInCar, checkOutCar, totalSlots, setTotalSlots, pricePerHour, setPricePerHour, pricePerDay, setPricePerDay }}>
+    <ParkingContext.Provider value={{ 
+        slots, 
+        transactions, 
+        checkInCar, 
+        checkOutCar, 
+        totalSlots, 
+        setTotalSlots, 
+        pricePerHour, 
+        setPricePerHour, 
+        pricePerDay, 
+        setPricePerDay,
+        saveSettings
+    }}>
       {children}
     </ParkingContext.Provider>
   );
