@@ -144,7 +144,7 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
 
             <div>
               <Label className="mb-2 block">طريقة الدفع</Label>
-              <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)}>
+              <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)} className="flex items-center space-x-4" dir="rtl">
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="Cash" id="cash" />
                   <Label htmlFor="cash">نقداً</Label>

@@ -19,7 +19,7 @@ export default function Header() {
             <ThemeSwitcher />
             <Button asChild variant="ghost">
               <Link href="/admin">
-                <Shield className="ml-2 h-4 w-4" />
+                <Shield className="mr-2 h-4 w-4" />
                 المسؤول
               </Link>
             </Button>

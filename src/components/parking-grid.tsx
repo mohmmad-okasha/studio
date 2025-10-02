@@ -36,8 +36,8 @@ export default function ParkingGrid() {
             className={cn(
               'cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1',
               slot.isOccupied
-                ? 'bg-amber-100 border-amber-300 hover:bg-amber-200 dark:bg-amber-900/40 dark:border-amber-700/60 dark:hover:bg-amber-900/60'
-                : 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:border-emerald-800/50 dark:hover:bg-emerald-900/50'
+                ? 'bg-amber-100 border-amber-300 hover:bg-amber-200 dark:bg-amber-950/40 dark:border-amber-700/60 dark:hover:bg-amber-900/60'
+                : 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:border-emerald-800/50 dark:hover:bg-emerald-900/50'
             )}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">

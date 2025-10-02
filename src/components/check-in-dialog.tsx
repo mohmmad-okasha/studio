@@ -149,7 +149,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>التقاط لوحة الترخيص</DialogTitle>
-             <button className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" onClick={() => setCameraViewOpen(false)}>
+             <button className="absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" onClick={() => setCameraViewOpen(false)}>
               <X className="h-4 w-4" />
               <span className="sr-only">إغلاق</span>
             </button>
@@ -172,7 +172,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
           </div>
           <DialogFooter>
             <Button onClick={handleCapture} disabled={!hasCameraPermission} className="w-full bg-accent hover:bg-accent/90">
-              <Camera className="ml-2 h-4 w-4" />
+              <Camera className="mr-2 h-4 w-4" />
               التقاط
             </Button>
           </DialogFooter>
@@ -201,10 +201,10 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
                   value={licensePlate}
                   onChange={(e) => setLicensePlate(e.target.value)}
                   placeholder="أدخل لوحة الترخيص"
-                  className="pr-24 text-lg h-12"
+                  className="pl-24 text-lg h-12"
                   required
                 />
-                 <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center">
+                 <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
                     <Button 
                       type="button" 
                       size="icon" 

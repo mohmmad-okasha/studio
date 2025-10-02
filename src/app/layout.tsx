@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Noto_Sans_Arabic } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const noto = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  variable: '--font-noto-sans-arabic',
+});
 
 export const metadata: Metadata = {
   title: 'ParkPilot | مساعد الركن',
@@ -22,7 +25,7 @@ export default function RootLayout({
       <body
         className={cn(
           'min-h-screen bg-background font-body antialiased',
-          inter.variable
+          noto.variable
         )}
       >
         <ThemeProvider
