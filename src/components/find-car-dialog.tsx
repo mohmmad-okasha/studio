@@ -37,12 +37,12 @@ export default function FindCarDialog() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
-    if (!isFindOpen) {
+    if (!isFindOpen && !isCheckOutOpen) {
       setLicensePlate('');
       setCameraViewOpen(false);
       setFoundSlot(null);
     }
-  }, [isFindOpen]);
+  }, [isFindOpen, isCheckOutOpen]);
 
   useEffect(() => {
     if (!isCameraViewOpen) {
@@ -66,6 +66,7 @@ export default function FindCarDialog() {
           title: 'نجاح التعرف الضوئي',
           description: `تم التعرف على لوحة الترخيص: ${plate}`,
         });
+        // Automatically search after OCR
         handleSearch(plate);
       } else {
         throw new Error('لم يتم العثور على لوحة ترخيص.');
@@ -125,7 +126,8 @@ export default function FindCarDialog() {
   };
   
   const handleSearch = (plateToSearch: string) => {
-    if (!plateToSearch.trim()) {
+    const plate = plateToSearch.trim().toUpperCase();
+    if (!plate) {
       toast({
         title: 'خطأ',
         description: 'الرجاء إدخال رقم لوحة الترخيص للبحث.',
@@ -135,17 +137,17 @@ export default function FindCarDialog() {
     }
     
     const found = slots.find(
-      (slot) => slot.isOccupied && slot.licensePlate?.toUpperCase() === plateToSearch.toUpperCase()
+      (slot) => slot.isOccupied && slot.licensePlate?.toUpperCase() === plate
     );
 
     if (found) {
       setFoundSlot(found);
-      setCheckOutOpen(true);
-      setFindOpen(false); // Close the search dialog
+      setCheckOutOpen(true); // Open the checkout dialog
+      setFindOpen(false);    // Close the find dialog
     } else {
       toast({
         title: 'لم يتم العثور على السيارة',
-        description: `لا توجد سيارة متوقفة حاليًا تحمل لوحة الترخيص '${plateToSearch.toUpperCase()}'.`,
+        description: `لا توجد سيارة متوقفة حاليًا تحمل لوحة الترخيص '${plate}'.`,
         variant: 'destructive',
       });
     }
@@ -221,10 +223,10 @@ export default function FindCarDialog() {
                     value={licensePlate}
                     onChange={(e) => setLicensePlate(e.target.value)}
                     placeholder="أدخل لوحة الترخيص"
-                    className="pr-24 text-lg h-12"
+                    className="pl-24 text-lg h-12 text-right"
                     required
                   />
-                  <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center">
+                  <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
                       <Button 
                         type="button" 
                         size="icon" 
@@ -254,6 +256,7 @@ export default function FindCarDialog() {
           </form>
         </DialogContent>
       </Dialog>
+
       {foundSlot && (
         <CheckOutDialog
           isOpen={isCheckOutOpen}
