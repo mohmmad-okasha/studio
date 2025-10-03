@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParking } from '@/hooks/use-parking';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Car, Clock, ParkingCircle } from 'lucide-react';
@@ -16,6 +16,15 @@ export default function ParkingGrid() {
   const [selectedSlot, setSelectedSlot] = useState<ParkingSlot | null>(null);
   const [isCheckInOpen, setCheckInOpen] = useState(false);
   const [isCheckOutOpen, setCheckOutOpen] = useState(false);
+  const [, setForceRender] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setForceRender(prev => prev + 1);
+    }, 60000); // كل 60 ثانية (دقيقة)
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handleSlotClick = (slot: ParkingSlot) => {
     setSelectedSlot(slot);
