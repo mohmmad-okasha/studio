@@ -16,7 +16,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { ParkingSlot } from '@/lib/types';
 import { useParking } from '@/hooks/use-parking';
 import { useToast } from '@/hooks/use-toast';
-import { Camera, Loader2, X } from 'lucide-react';
+import { Camera, Loader2, Upload, X } from 'lucide-react';
 import { recognizeLicensePlate } from '@/ai/flows/license-plate-recognition';
 
 interface CheckInDialogProps {
@@ -191,20 +191,20 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
             <DialogDescription>أدخل لوحة ترخيص السيارة لتسجيل دخولها. يمكنك استخدام الكاميرا للتعرف عليها.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-1 items-center gap-4">
+            <div className="space-y-2">
               <Label htmlFor="license-plate" className="sr-only">
                 لوحة الترخيص
               </Label>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <Input
                   id="license-plate"
                   value={licensePlate}
                   onChange={(e) => setLicensePlate(e.target.value)}
                   placeholder="أدخل لوحة الترخيص"
-                  className="pl-24 text-lg h-12 text-center"
+                  className="text-lg h-12 text-center flex-grow"
                   required
                 />
-                 <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
+                 <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center bg-background pr-2">
                     <Button 
                       type="button" 
                       size="icon" 
@@ -217,7 +217,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
                       {isOcrLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
                     </Button>
                     <Label htmlFor="plate-upload" className="flex items-center justify-center h-9 w-10 cursor-pointer text-muted-foreground hover:text-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                        <Upload className="h-5 w-5" />
                         <span className="sr-only">تحميل صورة</span>
                     </Label>
                     <Input id="plate-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange}/>
