@@ -1,4 +1,4 @@
-import { ParkingCircle, Shield, MoreVertical } from 'lucide-react';
+import { ParkingCircle, Shield, MoreVertical, Car } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import ThemeSwitcher from './theme-switcher';
@@ -8,7 +8,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import { useState } from 'react';
 
 export default function Header() {
   return (
@@ -24,7 +26,6 @@ export default function Header() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2">
-            <ThemeSwitcher />
             <FindCarDialog />
             <Button asChild variant="ghost">
               <Link href="/admin">
@@ -32,6 +33,7 @@ export default function Header() {
                 المسؤول
               </Link>
             </Button>
+            <ThemeSwitcher />
           </div>
 
           {/* Mobile Menu */}
@@ -43,17 +45,18 @@ export default function Header() {
                   <span className="sr-only">فتح القائمة</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
                   <FindCarDialog />
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/admin" className="w-full justify-start">
+                  <Link href="/admin" className="w-full justify-start cursor-pointer">
                     <Shield className="ml-2 h-4 w-4" />
                     <span>المسؤول</span>
                   </Link>
                 </DropdownMenuItem>
-                <div className="px-2 py-1">
+                <DropdownMenuSeparator />
+                <div className="px-2 py-1.5">
                   <ThemeSwitcher />
                 </div>
               </DropdownMenuContent>

@@ -21,6 +21,27 @@ import { recognizeLicensePlate } from '@/ai/flows/license-plate-recognition';
 import CheckOutDialog from './check-out-dialog';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
+// ForwardRef for DropdownMenuItem compatibility
+const FindCarTrigger = React.forwardRef<HTMLButtonElement>((props, ref) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  if (isDesktop) {
+      return (
+        <Button variant="outline" {...props} ref={ref}>
+          <Car className="ml-2 h-4 w-4" />
+          تسجيل خروج
+        </Button>
+      );
+    }
+    return (
+      <button className="w-full text-right p-2 text-sm flex items-center cursor-pointer" {...props} ref={ref}>
+        <Car className="ml-2 h-4 w-4" />
+        <span>تسجيل خروج</span>
+      </button>
+    )
+});
+FindCarTrigger.displayName = 'FindCarTrigger';
+
+
 export default function FindCarDialog() {
   const [isFindOpen, setFindOpen] = useState(false);
   const [licensePlate, setLicensePlate] = useState('');
@@ -33,7 +54,6 @@ export default function FindCarDialog() {
 
   const [foundSlot, setFoundSlot] = useState<ParkingSlot | null>(null);
   const [isCheckOutOpen, setCheckOutOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -159,23 +179,6 @@ export default function FindCarDialog() {
     e.preventDefault();
     handleSearch(licensePlate);
   };
-  
-  const TriggerButton = () => {
-    if (isDesktop) {
-      return (
-        <Button variant="outline">
-          <Car className="ml-2 h-4 w-4" />
-          تسجيل خروج
-        </Button>
-      );
-    }
-    return (
-      <button className="w-full text-right p-2 text-sm">
-        <Car className="ml-2 h-4 w-4 inline-block" />
-        <span>تسجيل خروج</span>
-      </button>
-    )
-  }
 
   if (isCameraViewOpen) {
     return (
@@ -220,7 +223,7 @@ export default function FindCarDialog() {
     <>
       <Dialog open={isFindOpen} onOpenChange={setFindOpen}>
         <DialogTrigger asChild>
-          <TriggerButton />
+          <FindCarTrigger />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <form onSubmit={handleSubmit}>
