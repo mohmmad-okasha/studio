@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { AuthProvider } from '@/lib/auth';
 
 const noto = Noto_Sans_Arabic({
   subsets: ['arabic'],
@@ -34,7 +35,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
           <Toaster />
         </ThemeProvider>
       </body>
