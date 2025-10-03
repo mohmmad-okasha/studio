@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceStrict, format } from 'date-fns';
 import { ar } from 'date-fns/locale';
+import { Separator } from './ui/separator';
 
 interface CheckOutDialogProps {
   isOpen: boolean;
@@ -112,12 +113,18 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            <div className="text-sm">
-              <p><strong>تسجيل الدخول:</strong> {format(slot.checkInTime, 'Pp', { locale: ar })}</p>
-              <p><strong>المدة:</strong> {formatDistanceStrict(currentTime, slot.checkInTime, { locale: ar, addSuffix: true })}</p>
+            <div className="text-sm space-y-1 rounded-md border bg-muted/50 p-3">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">تسجيل الدخول:</span>
+                <span className="font-medium">{format(slot.checkInTime, 'Pp', { locale: ar })}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">المدة:</span>
+                <span className="font-medium">{formatDistanceStrict(currentTime, slot.checkInTime, { locale: ar, addSuffix: false })}</span>
+              </div>
             </div>
             
-            <div className="p-3 bg-secondary rounded-lg">
+            <div className="p-3 bg-secondary/50 rounded-lg">
               <h4 className="font-semibold mb-2">حساب الرسوم</h4>
               {isLoadingFee ? (
                  <div className="flex items-center justify-center h-24">
@@ -126,15 +133,16 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
               ) : (
                 <div className="space-y-2">
                   <p className="text-xs text-muted-foreground">{feeExplanation}</p>
-                  <div className="flex items-baseline justify-between">
+                  <div className="flex items-center justify-between">
                     <Label>الرسوم المحسوبة</Label>
-                    <p className="text-lg font-bold">${calculatedFee?.toFixed(2) ?? '0.00'}</p>
+                    <p className="font-semibold">${calculatedFee?.toFixed(2) ?? '0.00'}</p>
                   </div>
                    <div className="flex items-center justify-between">
-                    <Label htmlFor="adjustment">تعديل</Label>
+                    <Label htmlFor="adjustment">تعديل يدوي</Label>
                     <Input id="adjustment" type="number" step="0.01" value={manualAdjustment} onChange={e => setManualAdjustment(e.target.value)} className="w-28 h-8" placeholder="$0.00"/>
                   </div>
-                   <div className="flex items-baseline justify-between border-t pt-2 mt-2">
+                  <Separator />
+                   <div className="flex items-baseline justify-between pt-1">
                     <Label className="text-base">المبلغ الإجمالي</Label>
                     <p className="text-2xl font-bold text-accent">${finalAmount.toFixed(2)}</p>
                   </div>
@@ -143,22 +151,22 @@ export default function CheckOutDialog({ isOpen, setIsOpen, slot }: CheckOutDial
             </div>
 
             <div>
-              <Label className="mb-2 block">طريقة الدفع</Label>
-              <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)} className="flex items-center space-x-4" dir="rtl">
-                <div className="flex items-center space-x-2">
+              <Label className="mb-2 block font-semibold">طريقة الدفع</Label>
+              <RadioGroup defaultValue="Cash" value={paymentMethod} onValueChange={(val: 'Cash' | 'CliQ') => setPaymentMethod(val)} className="flex items-center gap-4" dir="rtl">
+                <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer rounded-md border p-3 flex-1 data-[state=checked]:border-primary">
                   <RadioGroupItem value="Cash" id="cash" />
-                  <Label htmlFor="cash">نقداً</Label>
-                </div>
-                <div className="flex items-center space-x-2">
+                  نقداً
+                </Label>
+                <Label htmlFor="cliq" className="flex items-center gap-2 cursor-pointer rounded-md border p-3 flex-1 data-[state=checked]:border-primary">
                   <RadioGroupItem value="CliQ" id="cliq" />
-                  <Label htmlFor="cliq">كليك</Label>
-                </div>
+                  كليك
+                </Label>
               </RadioGroup>
             </div>
 
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-accent hover:bg-accent/90" disabled={isLoadingFee}>
+            <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90" disabled={isLoadingFee}>
               تأكيد وتسجيل الخروج
             </Button>
           </DialogFooter>

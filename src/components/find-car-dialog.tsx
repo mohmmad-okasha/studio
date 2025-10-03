@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Camera, Car, Loader2, Search, X } from 'lucide-react';
 import { recognizeLicensePlate } from '@/ai/flows/license-plate-recognition';
 import CheckOutDialog from './check-out-dialog';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export default function FindCarDialog() {
   const [isFindOpen, setFindOpen] = useState(false);
@@ -32,6 +33,7 @@ export default function FindCarDialog() {
 
   const [foundSlot, setFoundSlot] = useState<ParkingSlot | null>(null);
   const [isCheckOutOpen, setCheckOutOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -157,6 +159,23 @@ export default function FindCarDialog() {
     e.preventDefault();
     handleSearch(licensePlate);
   };
+  
+  const TriggerButton = () => {
+    if (isDesktop) {
+      return (
+        <Button variant="outline">
+          <Car className="ml-2 h-4 w-4" />
+          تسجيل خروج
+        </Button>
+      );
+    }
+    return (
+      <button className="w-full text-right p-2 text-sm">
+        <Car className="ml-2 h-4 w-4 inline-block" />
+        <span>تسجيل خروج</span>
+      </button>
+    )
+  }
 
   if (isCameraViewOpen) {
     return (
@@ -201,10 +220,7 @@ export default function FindCarDialog() {
     <>
       <Dialog open={isFindOpen} onOpenChange={setFindOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">
-            <Car className="ml-2 h-4 w-4" />
-            تسجيل خروج
-          </Button>
+          <TriggerButton />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <form onSubmit={handleSubmit}>
@@ -223,7 +239,7 @@ export default function FindCarDialog() {
                     value={licensePlate}
                     onChange={(e) => setLicensePlate(e.target.value)}
                     placeholder="أدخل لوحة الترخيص"
-                    className="pl-24 text-lg h-12 text-right"
+                    className="pl-24 text-lg h-12 text-center"
                     required
                   />
                   <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
@@ -248,7 +264,7 @@ export default function FindCarDialog() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="bg-accent hover:bg-accent/90">
+              <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90">
                 <Search className="ml-2 h-4 w-4" />
                 بحث
               </Button>

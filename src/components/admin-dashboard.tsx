@@ -62,7 +62,7 @@ export default function AdminDashboard() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-grow container mx-auto px-4 py-6">
+      <main className="flex-grow container mx-auto px-4 py-6">
         <h2 className="text-3xl font-bold tracking-tight mb-6">لوحة تحكم المسؤول</h2>
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
@@ -91,10 +91,10 @@ export default function AdminDashboard() {
 
         <Card className="mb-6">
             <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>الإعدادات</CardTitle>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <CardTitle className="mb-2 sm:mb-0">الإعدادات</CardTitle>
                     {hasUnsavedChanges && (
-                        <div className="flex items-center gap-2 text-sm text-destructive">
+                        <div className="flex items-center gap-2 text-sm text-destructive animate-pulse">
                             <AlertCircle className="h-4 w-4" />
                             <span>لديك تغييرات غير محفوظة.</span>
                         </div>
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
         </Card>
 
         <DailyLog />
-      </div>
+      </main>
     </div>
   );
 }

@@ -16,10 +16,10 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="flex-grow container mx-auto px-4 py-6">
+      <main className="flex-grow container mx-auto px-4 py-6">
         <div className="mb-6 p-4 bg-card border rounded-lg shadow-sm">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-base font-medium">المواقف المتاحة</h3>
+            <h3 className="text-sm sm:text-base font-medium">المواقف المتاحة</h3>
             <span className="text-sm font-bold text-primary">
               {availableSlots} من {totalSlots}
             </span>
@@ -27,7 +27,7 @@ export default function Dashboard() {
           <Progress value={availablePercentage} className="h-2" />
         </div>
         <ParkingGrid />
-      </div>
+      </main>
     </div>
   );
 }

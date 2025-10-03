@@ -201,7 +201,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
                   value={licensePlate}
                   onChange={(e) => setLicensePlate(e.target.value)}
                   placeholder="أدخل لوحة الترخيص"
-                  className="pl-24 text-lg h-12 text-right"
+                  className="pl-24 text-lg h-12 text-center"
                   required
                 />
                  <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center">
@@ -226,7 +226,7 @@ export default function CheckInDialog({ isOpen, setIsOpen, slot }: CheckInDialog
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-accent hover:bg-accent/90">
+            <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90">
               تأكيد تسجيل الدخول
             </Button>
           </DialogFooter>

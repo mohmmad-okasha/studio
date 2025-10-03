@@ -37,7 +37,7 @@ export default function ParkingGrid() {
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
         {slots.map((slot) => (
           <Card
             key={slot.id}
@@ -49,18 +49,18 @@ export default function ParkingGrid() {
                 : 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:border-emerald-800/50 dark:hover:bg-emerald-900/50'
             )}
           >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
-              <CardTitle className="text-sm font-medium text-foreground/80">موقف {slot.id}</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-4">
+              <CardTitle className="text-xs sm:text-sm font-medium text-foreground/80">موقف {slot.id}</CardTitle>
               {slot.isOccupied ? (
-                <Car className="h-5 w-5 text-amber-500 dark:text-amber-400" />
+                <Car className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 dark:text-amber-400" />
               ) : (
-                <ParkingCircle className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
+                <ParkingCircle className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500 dark:text-emerald-400" />
               )}
             </CardHeader>
-            <CardContent className="p-4 pt-0">
+            <CardContent className="p-3 sm:p-4 pt-0">
               {slot.isOccupied && slot.licensePlate ? (
                 <div className="text-sm">
-                  <p className="font-bold text-lg text-amber-900 dark:text-amber-200">{slot.licensePlate}</p>
+                  <p className="font-bold text-base sm:text-lg text-amber-900 dark:text-amber-200 truncate">{slot.licensePlate}</p>
                   <div className="flex items-center gap-1 text-amber-700 dark:text-amber-400/80 mt-1">
                     <Clock className="h-3 w-3" />
                     <span className="text-xs">
@@ -69,7 +69,7 @@ export default function ParkingGrid() {
                   </div>
                 </div>
               ) : (
-                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-300">متاح</p>
+                <p className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-300">متاح</p>
               )}
             </CardContent>
           </Card>
