@@ -49,10 +49,20 @@ export async function POST(request: NextRequest) {
     // إرجاع معلومات المستخدم بدون كلمة المرور
     const userObject = user.toJSON();
 
+    // التأكد من أن البيانات بالتنسيق الصحيح
+    const formattedUser = {
+      id: userObject._id.toString(),
+      name: userObject.name,
+      phone: userObject.phone,
+      createdAt: userObject.createdAt,
+    };
+
+    console.log('Sending user data:', formattedUser); // تسجيل للتتبع
+
     return NextResponse.json(
       {
         message: 'تم تسجيل الدخول بنجاح',
-        user: userObject,
+        user: formattedUser,
         token: token
       },
       { status: 200 }

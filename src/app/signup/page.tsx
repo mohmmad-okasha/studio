@@ -94,6 +94,7 @@ export default function SignupPage() {
       const data = await response.json();
 
       if (response.ok) {
+        console.log('Signup successful, received data:', data); // تسجيل للتتبع
         toast({
           title: 'تم التسجيل بنجاح',
           description: 'مرحباً بك في نظام إدارة مواقف السيارات',

@@ -76,6 +76,7 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
+        console.log('Login successful, received data:', data); // تسجيل للتتبع
         toast({
           title: 'تم تسجيل الدخول بنجاح',
           description: `مرحباً بك، ${data.user.name}`,

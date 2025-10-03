@@ -46,16 +46,27 @@ export async function POST(request: NextRequest) {
 
     await newUser.save();
 
+    // إنشاء token بسيط (يمكن استخدام JWT لاحقاً)
+    const token = Buffer.from(`${newUser._id}:${Date.now()}`).toString('base64');
+
     // إرجاع استجابة نجاح بدون كلمة المرور
+    const userObject = newUser.toJSON();
+
+    // التأكد من أن البيانات بالتنسيق الصحيح
+    const formattedUser = {
+      id: userObject._id.toString(),
+      name: userObject.name,
+      phone: userObject.phone,
+      createdAt: userObject.createdAt,
+    };
+
+    console.log('Sending user data:', formattedUser); // تسجيل للتتبع
+
     return NextResponse.json(
       {
         message: 'تم إنشاء الحساب بنجاح',
-        user: {
-          id: newUser._id,
-          name: newUser.name,
-          phone: newUser.phone,
-          createdAt: newUser.createdAt,
-        }
+        user: formattedUser,
+        token: token
       },
       { status: 201 }
     );

@@ -32,8 +32,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (savedUser && savedToken) {
       try {
         const userData = JSON.parse(savedUser);
-        setUser(userData);
-        setToken(savedToken);
+        console.log('Retrieved user data from localStorage:', userData); // تسجيل للتتبع
+
+        // التحقق من وجود الحقول الأساسية فقط
+        if (userData && userData.id && userData.name) {
+          setUser(userData);
+          setToken(savedToken);
+        } else {
+          console.log('Invalid user data in localStorage, clearing...');
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+        }
       } catch (error) {
         console.error('خطأ في قراءة بيانات المستخدم:', error);
         localStorage.removeItem('user');
@@ -44,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (userData: User, userToken: string) => {
+    console.log('Logging in user:', userData); // تسجيل للتتبع
     setUser(userData);
     setToken(userToken);
     localStorage.setItem('user', JSON.stringify(userData));
