@@ -66,19 +66,20 @@ export default function ParkingGrid() {
           </Card>
         ))}
       </div>
-      {selectedSlot && !selectedSlot.isOccupied && (
-        <CheckInDialog
-          isOpen={isCheckInOpen}
-          setIsOpen={setCheckInOpen}
-          slot={selectedSlot}
-        />
-      )}
-      {selectedSlot && selectedSlot.isOccupied && (
-        <CheckOutDialog
-          isOpen={isCheckOutOpen}
-          setIsOpen={setCheckOutOpen}
-          slot={selectedSlot}
-        />
+      
+      {selectedSlot && (
+        <>
+          <CheckInDialog
+            isOpen={isCheckInOpen && !selectedSlot.isOccupied}
+            setIsOpen={setCheckInOpen}
+            slot={selectedSlot}
+          />
+          <CheckOutDialog
+            isOpen={isCheckOutOpen && selectedSlot.isOccupied}
+            setIsOpen={setCheckOutOpen}
+            slot={selectedSlot}
+          />
+        </>
       )}
     </>
   );
